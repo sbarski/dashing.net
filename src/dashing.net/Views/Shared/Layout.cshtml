@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -7,22 +8,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <title>Title</title>
     
-    <script type="text/javascript" src="/Scripts/jquery-1.9.1.js"></script>
-    <script type="text/javascript" src="/Scripts/es5-shim.js"></script>
-    
-    <script type="text/javascript" src="/Assets/javascripts/gridster/jquery.leanModal.min.js"></script>
-    <script type="text/javascript" src="/Assets/javascripts/gridster/jquery.gridster.js"></script>
-    <script type="text/javascript" src="/Assets/javascripts/batman.js"></script>
-    <script type="text/javascript" src="/Assets/javascripts/batman.jquery.js"></script>
+    @Scripts.Render("~/bundles/application")
 
-    <script type="text/javascript" src="/assets/javascripts/dashing.js"></script>
-    <script type="text/javascript" src="/assets/javascripts/dashing.gridster.js"></script>
-    <script type="text/javascript" src="/assets/javascripts/application.js"></script>
 
     <link rel="stylesheet" href="/assets/stylesheets/application.css"/>
+    
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="icon" href="/assets/favicon.ico">
 </head>
 <body>
-    <div>
+    <div id="container">
         @RenderBody()
     </div>
 </body>

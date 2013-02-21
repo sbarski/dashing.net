@@ -39,40 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IronRuby">
-      <HintPath>..\packages\IronRuby.1.1.3\Lib\IronRuby.dll</HintPath>
-    </Reference>
-    <Reference Include="IronRuby.Libraries">
-      <HintPath>..\packages\IronRuby.1.1.3\Lib\IronRuby.Libraries.dll</HintPath>
-    </Reference>
-    <Reference Include="IronRuby.Libraries.Yaml">
-      <HintPath>..\packages\IronRuby.1.1.3\Lib\IronRuby.Libraries.Yaml.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Dynamic">
-      <HintPath>..\packages\IronRuby.1.1.3\Lib\Microsoft.Dynamic.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Scripting">
-      <HintPath>..\packages\IronRuby.1.1.3\Lib\Microsoft.Scripting.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Scripting.Metadata">
-      <HintPath>..\packages\IronRuby.1.1.3\Lib\Microsoft.Scripting.Metadata.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="SassAndCoffee.AspNet">
-      <HintPath>..\packages\SassAndCoffee.AspNet.2.0.2.0\lib\net40\SassAndCoffee.AspNet.dll</HintPath>
-    </Reference>
-    <Reference Include="SassAndCoffee.Core">
-      <HintPath>..\packages\SassAndCoffee.Core.2.0.2.0\lib\net40-Client\SassAndCoffee.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="SassAndCoffee.JavaScript">
-      <HintPath>..\packages\SassAndCoffee.JavaScript.2.0.2.0\lib\net40-Client\SassAndCoffee.JavaScript.dll</HintPath>
-    </Reference>
-    <Reference Include="SassAndCoffee.Ruby">
-      <HintPath>..\packages\SassAndCoffee.Ruby.2.0.2.0\lib\net40-Client\SassAndCoffee.Ruby.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -83,6 +53,10 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Optimization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\System.Web.Optimization.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -135,12 +109,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transforms\CoffeeTransform.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -148,20 +124,21 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Assets\fonts\fontawesome-webfont.svg" />
     <Content Include="Assets\images\logo.png" />
-    <Content Include="Assets\javascripts\batman.jquery.js" />
-    <Content Include="Assets\javascripts\batman.js" />
-    <Content Include="Assets\javascripts\d3.v2.min.js" />
-    <Content Include="Assets\javascripts\gridster\jquery.gridster.js" />
-    <Content Include="Assets\javascripts\jquery.knob.js" />
-    <Content Include="Assets\javascripts\gridster\jquery.leanModal.min.js" />
-    <Content Include="Assets\javascripts\rickshaw.min.js" />
+    <Content Include="Scripts\batman.jquery.js" />
+    <Content Include="Scripts\batman.js" />
+    <Content Include="Scripts\d3.v2.min.js" />
+    <Content Include="Scripts\gridster\jquery.gridster.js" />
+    <Content Include="Scripts\jquery.knob.js" />
+    <Content Include="Scripts\gridster\jquery.leanModal.min.js" />
+    <Content Include="Scripts\rickshaw.min.js" />
     <Content Include="Assets\stylesheets\font-awesome.css" />
     <Content Include="Assets\stylesheets\jquery.gridster.css" />
     <Content Include="Global.asax" />
     <Content Include="Assets\fonts\fontawesome-webfont.eot" />
     <Content Include="Assets\fonts\fontawesome-webfont.ttf" />
     <Content Include="Assets\fonts\fontawesome-webfont.woff" />
-    <Content Include="Assets\javascripts\dashing.coffee" />
+    <Content Include="Scripts\dashing.coffee" />
+    <Content Include="Widgets\meter\meter.html" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\es5-shim.js" />
     <Content Include="Scripts\es5-shim.min.js" />
@@ -176,14 +153,14 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Widgets\meter\meter.coffee" />
+    <Content Include="Widgets\meter\meter.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Dashboards\" />
     <Folder Include="Jobs\" />
     <Folder Include="Lib\" />
-    <Folder Include="Models\" />
-    <Folder Include="Widgets\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -192,10 +169,10 @@
     <Content Include="Assets\stylesheets\application.scss" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\javascripts\dashing.gridster.coffee" />
+    <Content Include="Scripts\dashing.gridster.coffee" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\javascripts\application.coffee" />
+    <Content Include="Scripts\application.coffee" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Dashboard\Index.cshtml" />
