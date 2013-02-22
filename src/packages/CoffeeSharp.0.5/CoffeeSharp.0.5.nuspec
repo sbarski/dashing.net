@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>CoffeeSharp</id>
+    <version>0.5</version>
+    <authors>Tom Lokhorst</authors>
+    <owners>Tom Lokhorst</owners>
+    <projectUrl>http://tomlokhorst.github.com/CoffeeSharp</projectUrl>
+    <iconUrl>http://tomlokhorst.github.com/CoffeeSharp/img/coffeescript-32.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>CoffeeScript compiler for Windows.
+With a HttpHandler, command-line tool and a .NET library.
+
+For ASP.NET projects: After installing this package, all .coffee files will be compiled on the fly by the HttpHandler and returned as JavaScript.
+
+Note: For production usage, it is recommened to compile all CoffeeScript files from a build system using the command-line compiler.</description>
+    <tags>CoffeeScript Compiler JavaScript coffee</tags>
+    <references>
+      <reference file="CoffeeScriptHttpHandler.dll" />
+      <reference file="CoffeeSharp.dll" />
+      <reference file="Jurassic.dll" />
+    </references>
+  </metadata>
+</package>
