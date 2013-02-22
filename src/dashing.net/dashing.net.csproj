@@ -39,10 +39,46 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="CoffeeScriptHttpHandler">
+      <HintPath>..\packages\CoffeeSharp.0.5\lib\CoffeeScriptHttpHandler.dll</HintPath>
+    </Reference>
+    <Reference Include="CoffeeSharp">
+      <HintPath>..\packages\CoffeeSharp.0.5\lib\CoffeeSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="IronRuby">
+      <HintPath>..\packages\IronRuby.1.1.3\lib\IronRuby.dll</HintPath>
+    </Reference>
+    <Reference Include="IronRuby.Libraries">
+      <HintPath>..\packages\IronRuby.1.1.3\lib\IronRuby.Libraries.dll</HintPath>
+    </Reference>
+    <Reference Include="IronRuby.Libraries.Yaml">
+      <HintPath>..\packages\IronRuby.1.1.3\lib\IronRuby.Libraries.Yaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Jurassic">
+      <HintPath>..\packages\CoffeeSharp.0.5\lib\Jurassic.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Dynamic">
+      <HintPath>..\packages\IronRuby.1.1.3\lib\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting">
+      <HintPath>..\packages\IronRuby.1.1.3\lib\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Metadata">
+      <HintPath>..\packages\IronRuby.1.1.3\lib\Microsoft.Scripting.Metadata.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SassAndCoffee.Core">
+      <HintPath>..\packages\SassAndCoffee.Core.2.0.2.0\lib\net40-Client\SassAndCoffee.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="SassAndCoffee.Ruby">
+      <HintPath>..\packages\SassAndCoffee.Ruby.2.0.2.0\lib\net40-Client\SassAndCoffee.Ruby.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -107,6 +143,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="WebGrease">
+      <HintPath>..\packages\WebGrease.1.3.0\lib\WebGrease.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -117,12 +156,13 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transforms\CoffeeTransform.cs" />
+    <Compile Include="Transforms\ScssTransform.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Content Include="Assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="Assets\fontawesome-webfont.svg" />
     <Content Include="Assets\images\logo.png" />
     <Content Include="Scripts\batman.jquery.js" />
     <Content Include="Scripts\batman.js" />
@@ -134,9 +174,9 @@
     <Content Include="Assets\stylesheets\font-awesome.css" />
     <Content Include="Assets\stylesheets\jquery.gridster.css" />
     <Content Include="Global.asax" />
-    <Content Include="Assets\fonts\fontawesome-webfont.eot" />
-    <Content Include="Assets\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="Assets\fontawesome-webfont.eot" />
+    <Content Include="Assets\fontawesome-webfont.ttf" />
+    <Content Include="Assets\fontawesome-webfont.woff" />
     <Content Include="Scripts\dashing.coffee" />
     <Content Include="Widgets\meter\meter.html" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />

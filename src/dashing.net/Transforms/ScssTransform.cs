@@ -7,28 +7,27 @@ using System.Web.Optimization;
 
 namespace dashing.net.Transforms
 {
-    public class CoffeeTransform : IBundleTransform
+    public class ScssTransform : IBundleTransform
     {
         public void Process(BundleContext context, BundleResponse response)
         {
-            var coffee = new CoffeeSharp.CoffeeScriptEngine();
+            var compiler = new SassAndCoffee.Ruby.Sass.SassCompiler();
 
-            response.ContentType = "text/javascript";
+            response.ContentType = "text/css";
             response.Content = string.Empty;
 
             foreach (var fileInfo in response.Files)
             {
-                if (fileInfo.Extension.Equals(".coffee", StringComparison.Ordinal))
+                if (fileInfo.Extension.Equals(".sass", StringComparison.Ordinal) || fileInfo.Extension.Equals(".scss", StringComparison.Ordinal))
                 {
-                    var result = coffee.Compile(File.ReadAllText(fileInfo.FullName));
-
-                    response.Content += result;
+                    response.Content += compiler.Compile(fileInfo.FullName, false, new List<string>());
                 }
-                else if (fileInfo.Extension.Equals(".js", StringComparison.Ordinal))
+                else if (fileInfo.Extension.Equals(".css", StringComparison.Ordinal))
                 {
                     response.Content += File.ReadAllText(fileInfo.FullName);
                 }
             }
+
         }
     }
 }
