@@ -13,15 +13,11 @@ namespace dashing.net
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute("Sample", "sample", new { controller = "Dashboard", action = "sample" });
-
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
+                url: "{action}/{id}",
                 defaults: new { controller = "Dashboard", action = "Sample", id = UrlParameter.Optional }
             );
-
-
         }
     }
 }

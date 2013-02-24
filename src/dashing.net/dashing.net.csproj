@@ -154,16 +154,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Jobs\Sample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Transforms\CoffeeTransform.cs" />
-    <Compile Include="Transforms\ScssTransform.cs" />
+    <Compile Include="Infrastructure\CoffeeTransform.cs" />
+    <Compile Include="Infrastructure\ScssTransform.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Assets\fontawesome-webfont.svg" />
-    <Content Include="Assets\images\logo.png" />
+    <Content Include="Assets\logo.png" />
     <Content Include="Scripts\batman.jquery.js" />
     <Content Include="Scripts\batman.js" />
     <Content Include="Scripts\d3.v2.min.js" />
@@ -178,7 +179,15 @@
     <Content Include="Assets\fontawesome-webfont.ttf" />
     <Content Include="Assets\fontawesome-webfont.woff" />
     <Content Include="Scripts\dashing.coffee" />
+    <Content Include="Widgets\clock\clock.html" />
+    <Content Include="Widgets\comments\comments.html" />
+    <Content Include="Widgets\graph\graph.html" />
+    <Content Include="Widgets\iframe\iframe.html" />
+    <Content Include="Widgets\image\image.html" />
+    <Content Include="Widgets\list\list.html" />
     <Content Include="Widgets\meter\meter.html" />
+    <Content Include="Widgets\number\number.html" />
+    <Content Include="Widgets\text\text.html" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\es5-shim.js" />
     <Content Include="Scripts\es5-shim.min.js" />
@@ -195,11 +204,26 @@
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="Widgets\meter\meter.coffee" />
     <Content Include="Widgets\meter\meter.scss" />
+    <Content Include="Widgets\clock\clock.coffee" />
+    <Content Include="Widgets\clock\clock.scss" />
+    <Content Include="Widgets\comments\comments.coffee" />
+    <Content Include="Widgets\comments\comments.scss" />
+    <Content Include="Widgets\graph\graph.coffee" />
+    <Content Include="Widgets\graph\graph.scss" />
+    <Content Include="Widgets\iframe\iframe.coffee" />
+    <Content Include="Widgets\iframe\iframe.scss" />
+    <Content Include="Widgets\image\image.coffee" />
+    <Content Include="Widgets\image\image.scss" />
+    <Content Include="Widgets\list\list.coffee" />
+    <Content Include="Widgets\list\list.scss" />
+    <Content Include="Widgets\number\number.coffee" />
+    <Content Include="Widgets\number\number.scss" />
+    <Content Include="Widgets\text\text.coffee" />
+    <Content Include="Widgets\text\text.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Dashboards\" />
-    <Folder Include="Jobs\" />
     <Folder Include="Lib\" />
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +253,12 @@
   <ItemGroup>
     <Content Include="Views\Shared\Layout.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dashing.net.jobs\dashing.net.jobs.csproj">
+      <Project>{EFF2BAF0-C702-4355-83B0-C433F787DB68}</Project>
+      <Name>dashing.net.jobs</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -245,7 +275,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>49328</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:49169/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

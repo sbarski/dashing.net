@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Optimization;
 
-namespace dashing.net.Transforms
+namespace dashing.net.Infrastructure
 {
     public class CoffeeTransform : IBundleTransform
     {
