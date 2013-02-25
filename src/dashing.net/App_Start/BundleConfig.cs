@@ -23,9 +23,10 @@ namespace dashing.net.App_Start
                             .Include("~/Scripts/batman.jquery.js")
                             .Include("~/Scripts/dashing.coffee")
                             .Include("~/Scripts/dashing.gridster.coffee")
+                            .IncludeDirectory("~/Widgets", "*.coffee", true)
                             .Include("~/Scripts/application.coffee");
 
-            application.IncludeDirectory("~/Widgets", "*.coffee", true);
+           // application.IncludeDirectory("~/Widgets", "*.coffee", true);
 
             application.Transforms.Add(new CoffeeTransform());
             bundles.Add(application);
@@ -33,9 +34,10 @@ namespace dashing.net.App_Start
             var styles = new Bundle("~/bundles/application-css")
                 .Include("~/Assets/stylesheets/font-awesome.css")
                 .Include("~/Assets/stylesheets/jquery.gridster.css")
+                .IncludeDirectory("~/Widgets", "*.scss", true)
                 .Include("~/Assets/stylesheets/application.scss");
 
-            styles.IncludeDirectory("~/Widgets", "*.scss", true);
+            //styles.IncludeDirectory("~/Widgets", "*.scss", true);
 
             styles.Transforms.Add(new ScssTransform());
             bundles.Add(styles);

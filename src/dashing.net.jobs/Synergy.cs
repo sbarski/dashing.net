@@ -14,6 +14,8 @@ namespace dashing.net.jobs
             : base(sendMessage, "synergy", 3000)
         {
             _rand = new Random();
+
+            Start();
         }
 
         protected override object GetData()

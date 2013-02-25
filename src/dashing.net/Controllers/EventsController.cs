@@ -33,6 +33,8 @@ namespace dashing.net.Controllers
             var sample = new Sample(AddToQueue);
             var karma = new Karma(AddToQueue);
             var synergy = new Synergy(AddToQueue);
+            var convergence = new Convergence(AddToQueue);
+            var buzzwords = new Buzzwords(AddToQueue);
 
             return response;
         }

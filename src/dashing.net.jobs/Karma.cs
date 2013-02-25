@@ -21,6 +21,8 @@ namespace dashing.net.jobs
             _rand = new Random();
 
             CurrentKarma = _rand.Next(200000);
+
+            Start();
         }
 
         protected override object GetData()

@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buzzwords.cs" />
+    <Compile Include="Convergence.cs" />
     <Compile Include="Job.cs" />
     <Compile Include="Karma.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

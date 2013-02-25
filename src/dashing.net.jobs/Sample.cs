@@ -23,6 +23,7 @@ namespace dashing.net.jobs
 
             CurrentValuation = _rand.Next(100);
 
+            Start();
         }
 
         protected override object GetData()
