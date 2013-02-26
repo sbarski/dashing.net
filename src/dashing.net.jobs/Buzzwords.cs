@@ -17,7 +17,7 @@ namespace dashing.net.jobs
 
         private Dictionary<string, int> _buzzwordCounts = new Dictionary<string, int>(); 
 
-        public Buzzwords(Action<string> sendMessage) : base(sendMessage, "buzzwords", 2000)
+        public Buzzwords(Action<string> sendMessage) : base(sendMessage, "buzzwords", 500)
         {
             _rand = new Random();
 

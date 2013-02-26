@@ -15,6 +15,8 @@ using System.Web.Mvc.Async;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using dashing.net.jobs;
+using Quartz;
+using Quartz.Impl;
 
 namespace dashing.net.Controllers
 {
@@ -22,19 +24,41 @@ namespace dashing.net.Controllers
     {
         //private static StreamWriter _streamWriter;
         private static readonly ConcurrentQueue<StreamWriter> _streammessage = new ConcurrentQueue<StreamWriter>();
-        private static readonly ConcurrentQueue<string> _messages = new ConcurrentQueue<string>(); 
+        private static readonly ConcurrentQueue<string> _messages = new ConcurrentQueue<string>();
+
+        private static Sample sample = null;
+        private static Buzzwords buzzwords = null; 
 
         public HttpResponseMessage Get(HttpRequestMessage request)
         {
+            ISchedulerFactory schedFact = new StdSchedulerFactory();
+
+            // get a scheduler
+            //IScheduler sched = schedFact.GetScheduler();
+            //sched.Start();
+
             //Timer t = _timer.Value;
             HttpResponseMessage response = request.CreateResponse();
             response.Content = new PushStreamContent(WriteToStream, "text/event-stream");
 
-            var sample = new Sample(AddToQueue);
+            if (sample == null)
+            {
+                sample = new Sample(AddToQueue);
+               
+                //var trigger = new Quartz.Impl.Triggers.SimpleTriggerImpl("Buzzwords", DateTime.UtcNow, null, Quartz.Impl.Triggers.SimpleTriggerImpl.RepeatIndefinitely, TimeSpan.FromSeconds(sample.Period));
+                
+                //var jobDetail = new Quartz.Impl.JobDetailImpl("Buzzwords", typeof(Buzzwords));
+                
+            }
+                
             var karma = new Karma(AddToQueue);
             var synergy = new Synergy(AddToQueue);
             var convergence = new Convergence(AddToQueue);
-            var buzzwords = new Buzzwords(AddToQueue);
+
+            if (buzzwords == null)
+            {
+                buzzwords = new Buzzwords(AddToQueue);
+            }
 
             return response;
         }
