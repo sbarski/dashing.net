@@ -10,8 +10,8 @@ namespace dashing.net.jobs
     {
         private static Random _rand;
 
-        public Synergy(Action<string> sendMessage) 
-            : base(sendMessage, "synergy", 3000)
+        public Synergy(Action<string> sendMessage)
+            : base(sendMessage, "synergy", TimeSpan.FromSeconds(2))
         {
             _rand = new Random();
 

@@ -22,43 +22,22 @@ namespace dashing.net.Controllers
 {
     public class EventsController : ApiController
     {
-        //private static StreamWriter _streamWriter;
         private static readonly ConcurrentQueue<StreamWriter> _streammessage = new ConcurrentQueue<StreamWriter>();
         private static readonly ConcurrentQueue<string> _messages = new ConcurrentQueue<string>();
 
-        private static Sample sample = null;
-        private static Buzzwords buzzwords = null; 
+        private static Sample _sample = null;
+        private static Buzzwords _buzzwords = null;
+        private static Karma _karma = null;
+        private static Synergy _synergy = null;
+        private static Convergence _convergence = null;
+        private static Twitter _twitter = null;
 
         public HttpResponseMessage Get(HttpRequestMessage request)
         {
-            ISchedulerFactory schedFact = new StdSchedulerFactory();
-
-            // get a scheduler
-            //IScheduler sched = schedFact.GetScheduler();
-            //sched.Start();
-
-            //Timer t = _timer.Value;
             HttpResponseMessage response = request.CreateResponse();
             response.Content = new PushStreamContent(WriteToStream, "text/event-stream");
 
-            if (sample == null)
-            {
-                sample = new Sample(AddToQueue);
-               
-                //var trigger = new Quartz.Impl.Triggers.SimpleTriggerImpl("Buzzwords", DateTime.UtcNow, null, Quartz.Impl.Triggers.SimpleTriggerImpl.RepeatIndefinitely, TimeSpan.FromSeconds(sample.Period));
-                
-                //var jobDetail = new Quartz.Impl.JobDetailImpl("Buzzwords", typeof(Buzzwords));
-                
-            }
-                
-            var karma = new Karma(AddToQueue);
-            var synergy = new Synergy(AddToQueue);
-            var convergence = new Convergence(AddToQueue);
-
-            if (buzzwords == null)
-            {
-                buzzwords = new Buzzwords(AddToQueue);
-            }
+            LoadJobs();
 
             return response;
         }
@@ -100,6 +79,39 @@ namespace dashing.net.Controllers
                         // dont re-add the stream as an error ocurred presumable the client has lost connection
                     }
                 }
+            }
+        }
+
+        private void LoadJobs()
+        {
+            if (_sample == null)
+            {
+                _sample = new Sample(AddToQueue);
+            }
+
+            if (_karma == null)
+            {
+                _karma = new Karma(AddToQueue);
+            }
+
+            if (_synergy == null)
+            {
+                _synergy = new Synergy(AddToQueue);
+            }
+
+            if (_convergence == null)
+            {
+                _convergence = new Convergence(AddToQueue);
+            }
+
+            if (_buzzwords == null)
+            {
+                _buzzwords = new Buzzwords(AddToQueue);
+            }
+
+            if (_twitter == null)
+            {
+                _twitter = new Twitter(AddToQueue);
             }
         }
     }

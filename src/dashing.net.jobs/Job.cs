@@ -8,11 +8,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Quartz;
 
 namespace dashing.net.jobs
 {
-    public abstract class Job : IJob
+    public abstract class Job
     {
         private readonly Lazy<Timer> _timer;
         private readonly string _id;
@@ -23,24 +22,21 @@ namespace dashing.net.jobs
 
         protected bool IsReady { get; set; }
 
-        protected Job(Action<string> sendMessage, string id, int period = 1000)
+        protected Job(Action<string> sendMessage, string id, TimeSpan timeSpan)
         {
             _id = id;
 
-            Period = period;
-
             SendMessage = sendMessage;
 
-            //_timer = new Lazy<Timer>(() => new Timer(TimerCallback, null, 0, period));
+            _timer = new Lazy<Timer>(() => new Timer(TimerCallback, null, TimeSpan.Zero, timeSpan));
         }
 
         public void Start()
         {
-            //Timer t = _timer.Value;
+            Timer t = _timer.Value;
         }
 
         private void TimerCallback(object state)
-        //public void TriggerJob()
         {
             SendMessage(SendEvent(GetData()));
         }
@@ -78,11 +74,6 @@ namespace dashing.net.jobs
             }
 
             return result;
-        }
-
-        public void Execute(IJobExecutionContext context)
-        {
-            throw new NotImplementedException();
         }
     }
 }

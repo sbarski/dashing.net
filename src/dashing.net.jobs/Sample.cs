@@ -17,7 +17,7 @@ namespace dashing.net.jobs
         public int LastValuation { get; private set; }
         
         public Sample(Action<string> sendMessage)
-            : base(sendMessage, "valuation", 2000)
+            : base(sendMessage, "valuation", TimeSpan.FromSeconds(2))
         {
             _rand = new Random();
 

@@ -15,7 +15,8 @@ namespace dashing.net.jobs
         private ConcurrentQueue<Tuple<int, int>> _points; 
         private int _lastX;
 
-        public Convergence(Action<string> sendMessage) : base(sendMessage, "convergence", 2000)
+        public Convergence(Action<string> sendMessage)
+            : base(sendMessage, "convergence", TimeSpan.FromSeconds(2))
         {
             _rand = new Random();
             _points = new ConcurrentQueue<Tuple<int, int>>();

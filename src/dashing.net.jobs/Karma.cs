@@ -16,7 +16,7 @@ namespace dashing.net.jobs
         public int LastKarma { get; private set; }
 
         public Karma(Action<string> sendMessage)
-            : base(sendMessage, "karma", 1000)
+            : base(sendMessage, "karma", TimeSpan.FromSeconds(2))
         {
             _rand = new Random();
 
