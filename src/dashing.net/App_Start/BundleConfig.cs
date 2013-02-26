@@ -25,6 +25,7 @@ namespace dashing.net.App_Start
                             .Include("~/Scripts/dashing.gridster.coffee")
                             .IncludeDirectory("~/Widgets", "*.coffee", true)
                             .Include("~/Scripts/application.coffee");
+                            
 
            // application.IncludeDirectory("~/Widgets", "*.coffee", true);
 
