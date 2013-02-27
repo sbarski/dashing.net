@@ -11,7 +11,7 @@ namespace dashing.net.jobs
 {
     public class Sample : Job
     {
-        private static Random _rand;
+        private readonly Random _rand;
 
         public int CurrentValuation { get; private set; }
         public int LastValuation { get; private set; }

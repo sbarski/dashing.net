@@ -10,9 +10,9 @@ namespace dashing.net.jobs
 {
     public class Convergence : Job
     {
-        private Random _rand;
+        private readonly Random _rand;
 
-        private ConcurrentQueue<Tuple<int, int>> _points; 
+        private readonly ConcurrentQueue<Tuple<int, int>> _points; 
         private int _lastX;
 
         public Convergence(Action<string> sendMessage)

@@ -159,7 +159,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Jobs\Sample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\CoffeeTransform.cs" />
     <Compile Include="Infrastructure\ScssTransform.cs" />
@@ -229,6 +228,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Dashboards\" />
+    <Folder Include="Jobs\" />
     <Folder Include="Lib\" />
   </ItemGroup>
   <ItemGroup>

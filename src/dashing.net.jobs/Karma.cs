@@ -10,7 +10,7 @@ namespace dashing.net.jobs
 {
     public class Karma : Job
     {
-        private static Random _rand;
+        private readonly Random _rand;
 
         public int CurrentKarma { get; private set; }
         public int LastKarma { get; private set; }

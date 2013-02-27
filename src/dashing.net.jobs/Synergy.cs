@@ -8,7 +8,7 @@ namespace dashing.net.jobs
 {
     public class Synergy : Job
     {
-        private static Random _rand;
+        private readonly Random _rand;
 
         public Synergy(Action<string> sendMessage)
             : base(sendMessage, "synergy", TimeSpan.FromSeconds(2))

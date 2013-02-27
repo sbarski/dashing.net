@@ -57,7 +57,9 @@ namespace dashing.net.jobs
         private dynamic Merge(object item1, object item2)
         {
             if (item1 == null || item2 == null)
+            {
                 return item1 ?? item2 ?? new ExpandoObject();
+            }
 
             dynamic expando = new ExpandoObject();
 

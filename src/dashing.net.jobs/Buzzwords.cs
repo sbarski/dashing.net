@@ -8,8 +8,8 @@ namespace dashing.net.jobs
 {
     public class Buzzwords : Job
     {
-        private Random _rand;
-        private string[] _buzzwords =
+        private readonly Random _rand;
+        private readonly string[] _buzzwords =
             {
                 "Paradigm shift", "Leverage", "Pivoting", "Turn-key", "Streamlininess",
                 "Exit Strategy", "Synergy", "Enterprise", "Web 2.0"

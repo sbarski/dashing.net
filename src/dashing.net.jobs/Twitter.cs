@@ -14,7 +14,7 @@ namespace dashing.net.jobs
     {
         private const string _searchTerm = "#todayilearned";
 
-        public Twitter(Action<string> sendMessage) : base(sendMessage, "twitter_mentions", TimeSpan.FromSeconds(20))
+        public Twitter(Action<string> sendMessage) : base(sendMessage, "twitter_mentions", TimeSpan.FromSeconds(5))
         {
             Start();
         }
@@ -24,13 +24,20 @@ namespace dashing.net.jobs
             using (var client = new WebClient())
             {
                 var url = string.Format("http://search.twitter.com/search.json?q={0}", HttpUtility.UrlEncode(_searchTerm));
-                var data = client.OpenRead(url);
+               
+                using (var data = client.OpenRead(url))
+                {
+                    if (data == null)
+                    {
+                        return new {};
+                    }
+                    
+                    var reader = new StreamReader(data);
 
-                var reader = new StreamReader(data);
+                    var results = JsonConvert.DeserializeObject<SearchResults>(reader.ReadToEnd());
 
-                var results = JsonConvert.DeserializeObject<SearchResults>(reader.ReadToEnd());
-
-                return new {comments = results.Results.Select(n => new {name = n.FromUser, body = n.Text, avatar = n.ProfileImageUrl})};
+                    return new { comments = results.Results.Select(n => new { name = n.FromUser, body = n.Text, avatar = n.ProfileImageUrl }) };
+                }
             }
         }
     }

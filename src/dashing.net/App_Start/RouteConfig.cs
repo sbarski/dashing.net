@@ -16,7 +16,7 @@ namespace dashing.net
             routes.MapRoute(
                 name: "Default",
                 url: "{action}/{id}",
-                defaults: new { controller = "Dashboard", action = "Sample", id = UrlParameter.Optional }
+                defaults: new { controller = "Dashboard", action = "Sampletv", id = UrlParameter.Optional }
             );
         }
     }
