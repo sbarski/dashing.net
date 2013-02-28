@@ -13,6 +13,11 @@ namespace dashing.net
                 name: "EventsApi",
                 routeTemplate: "api/{controller}"
             );
+
+            config.Routes.MapHttpRoute(
+                name: "Widget",
+                routeTemplate: "widgets/{id}",
+                defaults: new { controller = "Widgets" });
         }
     }
 }
