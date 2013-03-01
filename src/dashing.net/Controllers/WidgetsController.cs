@@ -23,9 +23,6 @@ namespace dashing.net.Controllers
 
             var widget = request.RequestUri.Segments[request.RequestUri.Segments.Length - 1];
 
-            //var values = str.Split(new [] { ':' });
-            //var coordinate = values[1].TrimEnd(new[] { '{' });
-
             var message = new { text = str };
 
             TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
