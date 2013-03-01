@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dashing.net", "dashing.net\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dashing.net.jobs", "dashing.net.jobs\dashing.net.jobs.csproj", "{EFF2BAF0-C702-4355-83B0-C433F787DB68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dashing.net.streaming", "dashing.net.streaming\dashing.net.streaming.csproj", "{E8E6F9C1-B3DA-423F-BC5E-A00D97EE2589}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{EFF2BAF0-C702-4355-83B0-C433F787DB68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFF2BAF0-C702-4355-83B0-C433F787DB68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFF2BAF0-C702-4355-83B0-C433F787DB68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8E6F9C1-B3DA-423F-BC5E-A00D97EE2589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8E6F9C1-B3DA-423F-BC5E-A00D97EE2589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8E6F9C1-B3DA-423F-BC5E-A00D97EE2589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8E6F9C1-B3DA-423F-BC5E-A00D97EE2589}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

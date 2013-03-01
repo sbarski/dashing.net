@@ -264,6 +264,10 @@
       <Project>{EFF2BAF0-C702-4355-83B0-C433F787DB68}</Project>
       <Name>dashing.net.jobs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\dashing.net.streaming\dashing.net.streaming.csproj">
+      <Project>{e8e6f9c1-b3da-423f-bc5e-a00d97ee2589}</Project>
+      <Name>dashing.net.streaming</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

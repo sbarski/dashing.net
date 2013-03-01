@@ -17,6 +17,7 @@ using Newtonsoft.Json.Linq;
 using dashing.net.jobs;
 using Quartz;
 using Quartz.Impl;
+using dashing.net.streaming;
 
 namespace dashing.net.Controllers
 {
@@ -84,6 +85,8 @@ namespace dashing.net.Controllers
 
         private void LoadJobs()
         {
+            Streaming.SendMessage = AddToQueue;
+
             if (_sample == null)
             {
                 _sample = new Sample(AddToQueue);
