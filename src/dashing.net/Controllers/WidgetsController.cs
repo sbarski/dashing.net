@@ -5,9 +5,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using System.Web.Script.Serialization;
 using Newtonsoft.Json;
+using dashing.net.Infrastructure;
 using dashing.net.streaming;
 using System.Dynamic;
 
@@ -17,21 +20,19 @@ namespace dashing.net.Controllers
     {
         public void Post(HttpRequestMessage request)
         {
-            //var result = request.Content.ReadAsByteArrayAsync().Result;
+            var result = request.Content.ReadAsByteArrayAsync().Result;
 
-            //var str = System.Text.Encoding.Default.GetString(result);
+            var body = System.Text.Encoding.Default.GetString(result);
 
-            //var widget = request.RequestUri.Segments[request.RequestUri.Segments.Length - 1];
+            var widget = request.RequestUri.Segments[request.RequestUri.Segments.Length - 1];
 
-            //var message = new { text = str };
+            var jsonSer = new JavaScriptSerializer();
+            var json = jsonSer.Deserialize<object>(body);  //JsonConvert.DeserializeObject(body);
 
-            //TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
-            //int secondsSinceEpoch = (int)t.TotalSeconds;
-
-            //var payload = Merge(message, new { id = widget, updatedAt = secondsSinceEpoch });
-
-            //var data = JsonConvert.SerializeObject(payload);
-            //Streaming.SendMessage(string.Format("data: {0}\n\n", data));
+            if (Dashing.SendMessage != null)
+            {
+                Dashing.SendMessage(JsonHelper.Merge(new { id = widget}, json ));
+            }
         }
     }
 }
