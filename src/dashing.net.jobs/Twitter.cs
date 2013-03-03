@@ -4,42 +4,49 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
+using dashing.net.streaming;
 
 namespace dashing.net.jobs
 {
-    public class Twitter : Job
+    public class Twitter : IJob
     {
-        private const string _searchTerm = "#todayilearned";
+        private const string SearchTerm = "#todayilearned";
 
-        public Twitter(Action<string> sendMessage) : base(sendMessage, "twitter_mentions", TimeSpan.FromSeconds(5))
+        public Lazy<Timer> Timer { get; private set; }
+
+        public Twitter()
         {
-            Start();
+            Timer = new Lazy<Timer>(() => new Timer(SendMessage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2)));
+
+            var start = Timer.Value;
         }
 
-        protected override object GetData()
+        private void SendMessage(object message)
         {
             using (var client = new WebClient())
             {
-                var url = string.Format("http://search.twitter.com/search.json?q={0}", HttpUtility.UrlEncode(_searchTerm));
+                var url = string.Format("http://search.twitter.com/search.json?q={0}", HttpUtility.UrlEncode(SearchTerm));
                
                 using (var data = client.OpenRead(url))
                 {
                     if (data == null)
                     {
-                        return new {};
+                        return;
                     }
                     
                     var reader = new StreamReader(data);
 
                     var results = JsonConvert.DeserializeObject<SearchResults>(reader.ReadToEnd());
 
-                    return new { comments = results.Results.Select(n => new { name = n.FromUser, body = n.Text, avatar = n.ProfileImageUrl }) };
+                    Dashing.SendMessage(new { id = "twitter_mentions", comments = results.Results.Select(n => new { name = n.FromUser, body = n.Text, avatar = n.ProfileImageUrl }) });
                 }
             }
         }
+
     }
 
     public class SearchResults

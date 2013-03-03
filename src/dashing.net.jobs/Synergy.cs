@@ -2,25 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using dashing.net.streaming;
 
 namespace dashing.net.jobs
 {
-    public class Synergy : Job
+    public class Synergy : IJob
     {
         private readonly Random _rand;
 
-        public Synergy(Action<string> sendMessage)
-            : base(sendMessage, "synergy", TimeSpan.FromSeconds(2))
+        public Lazy<Timer> Timer { get; private set; }
+
+        public Synergy()
         {
             _rand = new Random();
 
-            Start();
+            Timer = new Lazy<Timer>(() => new Timer(SendMessage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2)));
+
+            var start = Timer.Value;
         }
 
-        protected override object GetData()
+        protected void SendMessage(object message)
         {
-            return new {value = _rand.Next(100)};
+            Dashing.SendMessage(new {value = _rand.Next(100), id = "synergy"});
         }
     }
 }

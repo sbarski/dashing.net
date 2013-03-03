@@ -4,19 +4,22 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using dashing.net.streaming;
 
 namespace dashing.net.jobs
 {
-    public class Convergence : Job
+    public class Convergence : IJob
     {
         private readonly Random _rand;
 
         private readonly ConcurrentQueue<Tuple<int, int>> _points; 
         private int _lastX;
 
-        public Convergence(Action<string> sendMessage)
-            : base(sendMessage, "convergence", TimeSpan.FromSeconds(2))
+        public Lazy<Timer> Timer { get; private set; }
+
+        public Convergence()
         {
             _rand = new Random();
             _points = new ConcurrentQueue<Tuple<int, int>>();
@@ -27,11 +30,13 @@ namespace dashing.net.jobs
             }
 
             _lastX = _points.Count - 1;
-    
-            Start();
+
+            Timer = new Lazy<Timer>(() => new Timer(SendMessage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2)));
+
+            var start = Timer.Value;
         }
 
-        protected override object GetData()
+        protected void SendMessage(object message)
         {
             Tuple<int,int> obj;
             
@@ -41,7 +46,8 @@ namespace dashing.net.jobs
 
             _points.Enqueue(new Tuple<int, int>(_lastX, _rand.Next(50)));
 
-            return new {points = _points.Select(m => new {x = m.Item1, y = m.Item2})};
+            Dashing.SendMessage(new {id = "convergence", points = _points.Select(m => new {x = m.Item1, y = m.Item2})});
         }
+
     }
 }

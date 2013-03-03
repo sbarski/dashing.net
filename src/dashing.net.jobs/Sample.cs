@@ -4,35 +4,40 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using dashing.net.streaming;
 
 namespace dashing.net.jobs
 {
-    public class Sample : Job
+    public class Sample : IJob
     {
         private readonly Random _rand;
 
         public int CurrentValuation { get; private set; }
         public int LastValuation { get; private set; }
         
-        public Sample(Action<string> sendMessage)
-            : base(sendMessage, "valuation", TimeSpan.FromSeconds(2))
+        public Lazy<Timer> Timer { get; private set; }
+
+        public Sample()
         {
             _rand = new Random();
 
             CurrentValuation = _rand.Next(100);
 
-            Start();
+            Timer = new Lazy<Timer>(() => new Timer(SendMessage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2)));
+
+            var start = Timer.Value;
         }
 
-        protected override object GetData()
+        protected void SendMessage(object message)
         {
             LastValuation = CurrentValuation;
             
             CurrentValuation = _rand.Next(100);
-            
-            return new {current = CurrentValuation, last = LastValuation};
+
+            Dashing.SendMessage(new {current = CurrentValuation, last = LastValuation, id = "sample"});
         }
     }
 }

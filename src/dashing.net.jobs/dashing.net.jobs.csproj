@@ -45,12 +45,18 @@
   <ItemGroup>
     <Compile Include="Buzzwords.cs" />
     <Compile Include="Convergence.cs" />
-    <Compile Include="Job.cs" />
+    <Compile Include="IJob.cs" />
     <Compile Include="Karma.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sample.cs" />
     <Compile Include="Synergy.cs" />
     <Compile Include="Twitter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dashing.net.streaming\dashing.net.streaming.csproj">
+      <Project>{E8E6F9C1-B3DA-423F-BC5E-A00D97EE2589}</Project>
+      <Name>dashing.net.streaming</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

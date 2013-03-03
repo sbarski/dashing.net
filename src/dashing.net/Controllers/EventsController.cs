@@ -14,6 +14,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using dashing.net.Infrastructure;
 using dashing.net.jobs;
 using Quartz;
 using Quartz.Impl;
@@ -24,7 +25,7 @@ namespace dashing.net.Controllers
     public class EventsController : ApiController
     {
         private static readonly ConcurrentQueue<StreamWriter> _streammessage = new ConcurrentQueue<StreamWriter>();
-        private static readonly ConcurrentQueue<string> _messages = new ConcurrentQueue<string>();
+        private static readonly ConcurrentQueue<string> _messageQueue = new ConcurrentQueue<string>();
 
         private static Sample _sample = null;
         private static Buzzwords _buzzwords = null;
@@ -49,19 +50,29 @@ namespace dashing.net.Controllers
             _streammessage.Enqueue(streamWriter);
         }
 
-        private async void AddToQueue(string message)
+        private async void SendMessage(object message)
         {
-            _messages.Enqueue(message);
+            var t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+            var secondsSinceEpoch = (int)t.TotalSeconds;
 
-            if (_streammessage.Count == 0)
-            {
-                return;
-            }
+            var payload = JsonHelper.Merge(message, new {updatedAt = secondsSinceEpoch});
 
-            for (int x = 0; x < _messages.Count; x++)
+            var data = JsonConvert.SerializeObject(payload);
+
+            var currentMessage = string.Format("data: {0}\n\n", data);
+
+            ProcessQueue(currentMessage);
+
+        }
+
+        private static async void ProcessQueue(string message)
+        {
+            _messageQueue.Enqueue(message);
+
+            for (int x = 0; x < _messageQueue.Count; x++)
             {
                 string data = string.Empty;
-                _messages.TryDequeue(out data);
+                _messageQueue.TryDequeue(out data);
 
                 StreamWriter streamWriter;
                 _streammessage.TryDequeue(out streamWriter);
@@ -69,7 +80,7 @@ namespace dashing.net.Controllers
                 if (streamWriter != null)
                 {
                     await streamWriter.WriteLineAsync(data);
-                    
+
                     try
                     {
                         await streamWriter.FlushAsync();
@@ -85,36 +96,36 @@ namespace dashing.net.Controllers
 
         private void LoadJobs()
         {
-            Streaming.SendMessage = AddToQueue;
+            Dashing.SendMessage = SendMessage;
 
             if (_sample == null)
             {
-                _sample = new Sample(AddToQueue);
+                _sample = new Sample();
             }
 
             if (_karma == null)
             {
-                _karma = new Karma(AddToQueue);
+                _karma = new Karma();
             }
 
             if (_synergy == null)
             {
-                _synergy = new Synergy(AddToQueue);
+                _synergy = new Synergy();
             }
 
             if (_convergence == null)
             {
-                _convergence = new Convergence(AddToQueue);
+                _convergence = new Convergence();
             }
 
             if (_buzzwords == null)
             {
-                _buzzwords = new Buzzwords(AddToQueue);
+                _buzzwords = new Buzzwords();
             }
 
             if (_twitter == null)
             {
-                _twitter = new Twitter(AddToQueue);
+                _twitter = new Twitter();
             }
         }
     }

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using dashing.net.streaming;
 
 namespace dashing.net.jobs
 {
-    public class Buzzwords : Job
+    public class Buzzwords : IJob
     {
         private readonly Random _rand;
         private readonly string[] _buzzwords =
@@ -15,16 +17,20 @@ namespace dashing.net.jobs
                 "Exit Strategy", "Synergy", "Enterprise", "Web 2.0"
             };
 
-        private Dictionary<string, int> _buzzwordCounts = new Dictionary<string, int>(); 
+        private Dictionary<string, int> _buzzwordCounts = new Dictionary<string, int>();
 
-        public Buzzwords(Action<string> sendMessage) : base(sendMessage, "buzzwords", TimeSpan.FromSeconds(2))
+        public Lazy<Timer> Timer { get; private set; }
+
+        public Buzzwords()
         {
             _rand = new Random();
 
-            Start();
+            Timer = new Lazy<Timer>(() => new Timer(SendMessage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2)));
+
+            var start = Timer.Value;
         }
 
-        protected override object GetData()
+        protected void SendMessage(object message)
         {
             var random = _buzzwords[_rand.Next(_buzzwords.Length)];
 
@@ -37,7 +43,7 @@ namespace dashing.net.jobs
                 _buzzwordCounts.Add(random, 1);
             }
 
-            return new {items = _buzzwordCounts.Select(m => new {label = m.Key, value = m.Value})};
+            Dashing.SendMessage(new {id = "buzzwords", items = _buzzwordCounts.Select(m => new {label = m.Key, value = m.Value})});
         }
     }
 }

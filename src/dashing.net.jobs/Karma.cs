@@ -4,34 +4,39 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using dashing.net.streaming;
 
 namespace dashing.net.jobs
 {
-    public class Karma : Job
+    public class Karma : IJob
     {
         private readonly Random _rand;
 
         public int CurrentKarma { get; private set; }
         public int LastKarma { get; private set; }
 
-        public Karma(Action<string> sendMessage)
-            : base(sendMessage, "karma", TimeSpan.FromSeconds(2))
+        public Lazy<Timer> Timer { get; private set; }
+
+        public Karma()
         {
             _rand = new Random();
 
             CurrentKarma = _rand.Next(200000);
 
-            Start();
+            Timer = new Lazy<Timer>(() => new Timer(SendMessage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2)));
+
+            var start = Timer.Value;
         }
 
-        protected override object GetData()
+        public void SendMessage(object sent)
         {
             LastKarma = CurrentKarma;
 
             CurrentKarma = _rand.Next(200000);
 
-            return new { current = CurrentKarma, last = LastKarma };
+            Dashing.SendMessage(new {current = CurrentKarma, last = LastKarma, id = "karma"});
         }
     }
 }
