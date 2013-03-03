@@ -77,7 +77,7 @@ namespace dashing.net.Controllers
                 StreamWriter streamWriter;
                 _streammessage.TryDequeue(out streamWriter);
 
-                if (streamWriter != null)
+                if (streamWriter != null && !string.IsNullOrEmpty(data))
                 {
                     await streamWriter.WriteLineAsync(data);
 
