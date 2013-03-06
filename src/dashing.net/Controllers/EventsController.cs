@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -50,40 +51,51 @@ namespace dashing.net.Controllers
             _streammessage.Enqueue(streamWriter);
         }
 
-        private async void SendMessage(object message)
+        private void SendMessage(object message)
         {
-            var t = DateTime.UtcNow - new DateTime(1970, 1, 1);
-            var secondsSinceEpoch = (int)t.TotalSeconds;
+            var updatedAt = TimeHelper.ElapsedTimeSinceEpoch();
 
-            var payload = JsonHelper.Merge(message, new {updatedAt = secondsSinceEpoch});
+            if (message.GetType() == typeof(JObject))
+            {
+                ((dynamic)message).updatedAt = updatedAt;
+            }
+            else
+            {
+                message = JsonHelper.Merge(message, new { updatedAt = updatedAt });
+            }
 
-            var data = JsonConvert.SerializeObject(payload);
+            ProcessMessage(JsonConvert.SerializeObject(message));
+        }
 
+        private static void ProcessMessage(string data)
+        {
             var currentMessage = string.Format("data: {0}\n\n", data);
 
             ProcessQueue(currentMessage);
-
         }
 
-        private static async void ProcessQueue(string message)
+        private static void ProcessQueue(string message)
         {
             _messageQueue.Enqueue(message);
 
             for (int x = 0; x < _messageQueue.Count; x++)
             {
                 string data = string.Empty;
-                _messageQueue.TryDequeue(out data);
+                _messageQueue.TryPeek(out data);
 
                 StreamWriter streamWriter;
                 _streammessage.TryDequeue(out streamWriter);
 
                 if (streamWriter != null && !string.IsNullOrEmpty(data))
                 {
-                    await streamWriter.WriteLineAsync(data);
+                    streamWriter.WriteLine(data);
 
                     try
                     {
-                        await streamWriter.FlushAsync();
+                        streamWriter.Flush();
+
+                        _messageQueue.TryDequeue(out data);
+                        
                         _streammessage.Enqueue(streamWriter);
                     }
                     catch (Exception ex)

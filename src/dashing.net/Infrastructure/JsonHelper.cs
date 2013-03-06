@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
-using System.Web;
+
 
 namespace dashing.net.Infrastructure
 {
@@ -30,6 +29,11 @@ namespace dashing.net.Infrastructure
             }
 
             return result;
+        }
+
+        public static dynamic MergeDynamic(object item1, dynamic item2)
+        {
+            return item2;
         }
     }
 }

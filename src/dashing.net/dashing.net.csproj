@@ -161,6 +161,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\JsonHelper.cs" />
+    <Compile Include="Infrastructure\TimeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\CoffeeTransform.cs" />
     <Compile Include="Infrastructure\ScssTransform.cs" />
@@ -230,8 +231,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Dashboards\" />
-    <Folder Include="Jobs\" />
-    <Folder Include="Lib\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
