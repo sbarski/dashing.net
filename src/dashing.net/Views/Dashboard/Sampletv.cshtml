@@ -40,7 +40,7 @@
         </li>
 
     </ul>
-    <center><div style="font-size: 12px">Try this: curl -d '{ "auth_token": "YOUR_AUTH_TOKEN", "text": "Hey, Look what I can do!" }' \http://<%=request.host%>:<%=request.port%>/widgets/welcome</div></center>
+    <center><div style="font-size: 12px">Try this: curl -d "{ 'auth_token': 'YOUR_AUTH_TOKEN', 'text': 'Hey, Look what I can do!' }" @Request.Url.Scheme://@Request.Url.Host:@Request.Url.Port/widgets/welcome</div></center>
 </div>
 
 <script type="text/javascript">

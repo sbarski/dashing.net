@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Helpers;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -17,8 +18,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using dashing.net.Infrastructure;
 using dashing.net.jobs;
-using Quartz;
-using Quartz.Impl;
 using dashing.net.streaming;
 
 namespace dashing.net.Controllers
@@ -51,17 +50,17 @@ namespace dashing.net.Controllers
             _streammessage.Enqueue(streamWriter);
         }
 
-        private void SendMessage(object message)
+        private void SendMessage(dynamic message)
         {
             var updatedAt = TimeHelper.ElapsedTimeSinceEpoch();
 
             if (message.GetType() == typeof(JObject))
             {
-                ((dynamic)message).updatedAt = updatedAt;
+                message.updatedAt = updatedAt;
             }
             else
             {
-                message = JsonHelper.Merge(message, new { updatedAt = updatedAt });
+                message = JsonHelper.Merge(message, new { updatedAt });
             }
 
             ProcessMessage(JsonConvert.SerializeObject(message));
@@ -88,7 +87,14 @@ namespace dashing.net.Controllers
 
                 if (streamWriter != null && !string.IsNullOrEmpty(data))
                 {
-                    streamWriter.WriteLine(data);
+                    try
+                    {
+                        streamWriter.WriteLine(data);
+                    }
+                    catch (HttpException) //connection was most likely closed
+                    {
+                        return;
+                    }
 
                     try
                     {
