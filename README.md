@@ -9,7 +9,7 @@ dashing.net
 
 [dashing.net](http://sbarski.github.com/dashing.net/) allows you to create beautiful dashboards & widgets using html/scss/coffeescript/c#. The dashboard itself is written with asp.net web api/mvc 4. 
 
-We have tried to re-use as much code as possible from dashing to preserve compatibility. Therefore most of the behaviours and conventions used in dashing.net should be identical or closely mirrored to dashing. All widget frontend files (html,scss and coffeescript) can be used directly. Jobs, however, need to be re-implemented with .net in-mind.
+We have tried to re-use as much code as possible from dashing to preserve compatibility. Therefore most of the behaviours and conventions used in dashing.net should be identical or closely mirrored to dashing. All widget frontend files (html,scss and coffeescript) can be used directly. Jobs, however, need to be re-implemented in C# or your favourite .net compatible language.
 
 
 
