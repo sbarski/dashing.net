@@ -149,6 +149,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\WidgetsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -166,6 +167,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Assets\fontawesome-webfont.svg" />
     <Content Include="Assets\logo.png" />
+    <Content Include="Assets\favicon.ico" />
     <Content Include="Scripts\batman.jquery.js" />
     <Content Include="Scripts\batman.js" />
     <Content Include="Scripts\d3.v2.min.js" />
@@ -180,6 +182,7 @@
     <Content Include="Assets\fontawesome-webfont.ttf" />
     <Content Include="Assets\fontawesome-webfont.woff" />
     <Content Include="Scripts\dashing.coffee" />
+    <Content Include="Views\Error\404.html" />
     <Content Include="Widgets\clock\clock.html" />
     <Content Include="Widgets\comments\comments.html" />
     <Content Include="Widgets\graph\graph.html" />
@@ -221,10 +224,10 @@
     <Content Include="Widgets\number\number.scss" />
     <Content Include="Widgets\text\text.coffee" />
     <Content Include="Widgets\text\text.scss" />
+    <Content Include="Views\Error\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Dashboards\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

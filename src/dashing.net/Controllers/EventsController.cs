@@ -34,6 +34,9 @@ namespace dashing.net.Controllers
         private static Convergence _convergence = null;
         private static Twitter _twitter = null;
 
+        /// <summary>
+        /// Inspiration http://techbrij.com/real-time-chart-html5-push-sse-asp-net-web-api
+        /// </summary>
         public HttpResponseMessage Get(HttpRequestMessage request)
         {
             HttpResponseMessage response = request.CreateResponse();
@@ -79,7 +82,7 @@ namespace dashing.net.Controllers
 
             for (int x = 0; x < _messageQueue.Count; x++)
             {
-                string data = string.Empty;
+                var data = string.Empty;
                 _messageQueue.TryPeek(out data);
 
                 StreamWriter streamWriter;
@@ -104,7 +107,7 @@ namespace dashing.net.Controllers
                         
                         _streammessage.Enqueue(streamWriter);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         // dont re-add the stream as an error ocurred presumable the client has lost connection
                     }

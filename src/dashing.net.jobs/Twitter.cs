@@ -20,9 +20,11 @@ namespace dashing.net.jobs
 
         public Twitter()
         {
-            Timer = new Lazy<Timer>(() => new Timer(SendMessage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2)));
+            Timer = new Lazy<Timer>(() => new Timer(SendMessage, null, TimeSpan.Zero, TimeSpan.FromMinutes(10)));
 
             var start = Timer.Value;
+
+            SendMessage(null); //force the first send message manually
         }
 
         private void SendMessage(object message)

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using dashing.net.App_Start;
+using dashing.net.Controllers;
 
 namespace dashing.net
 {
@@ -45,6 +46,32 @@ namespace dashing.net
                     context.RewritePath(string.Format("~/Widgets/{0}/{0}.html", widget));
                 }
             }
+        }
+
+        /// <summary>
+        /// Adopted from the ideas presented here: http://thirteendaysaweek.com/2012/09/25/custom-error-page-with-asp-net-mvc-4/
+        /// </summary>
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            var exception = Server.GetLastError();
+            Server.ClearError();
+
+            var routeData = new RouteData();
+            routeData.Values.Add("controller", "Error");
+            routeData.Values.Add("action", "Index");
+            routeData.Values.Add("error", exception);
+
+            if (exception.GetType() == typeof (HttpException))
+            {
+                routeData.Values.Add("statusCode", ((HttpException)exception).GetHttpCode());
+            }
+            else
+            {
+                routeData.Values.Add("statusCode", 500);
+            }
+
+            IController controller = new ErrorController();
+            controller.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
         }
     }
 }
