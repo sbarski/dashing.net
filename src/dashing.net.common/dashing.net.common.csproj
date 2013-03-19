@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EFF2BAF0-C702-4355-83B0-C433F787DB68}</ProjectGuid>
+    <ProjectGuid>{1312F418-39DA-4AC4-BBF6-1D9CA56B9DFF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>dashing.net.jobs</RootNamespace>
-    <AssemblyName>dashing.net.jobs</AssemblyName>
+    <RootNamespace>dashing.net.common</RootNamespace>
+    <AssemblyName>dashing.net.common</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,13 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,28 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Buzzwords.cs" />
-    <Compile Include="Convergence.cs" />
-    <Compile Include="Karma.cs" />
+    <Compile Include="IJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sample.cs" />
-    <Compile Include="Synergy.cs" />
-    <Compile Include="Twitter.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\dashing.net.common\dashing.net.common.csproj">
-      <Project>{1312F418-39DA-4AC4-BBF6-1D9CA56B9DFF}</Project>
-      <Name>dashing.net.common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dashing.net.streaming\dashing.net.streaming.csproj">
-      <Project>{E8E6F9C1-B3DA-423F-BC5E-A00D97EE2589}</Project>
-      <Name>dashing.net.streaming</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy $(TargetPath) $(SolutionDir)\$(SolutionName)\Jobs /R /C /Y</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

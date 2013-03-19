@@ -81,6 +81,7 @@
       <HintPath>..\packages\SassAndCoffee.Ruby.2.0.2.0\lib\net40-Client\SassAndCoffee.Ruby.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
@@ -197,7 +198,9 @@
     <Content Include="Scripts\es5-shim.min.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -228,6 +231,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Jobs\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -254,6 +258,10 @@
     <Content Include="Views\Shared\Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\dashing.net.common\dashing.net.common.csproj">
+      <Project>{1312F418-39DA-4AC4-BBF6-1D9CA56B9DFF}</Project>
+      <Name>dashing.net.common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dashing.net.jobs\dashing.net.jobs.csproj">
       <Project>{EFF2BAF0-C702-4355-83B0-C433F787DB68}</Project>
       <Name>dashing.net.jobs</Name>

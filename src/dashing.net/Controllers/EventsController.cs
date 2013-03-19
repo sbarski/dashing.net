@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -17,6 +20,7 @@ using System.Web.Mvc.Async;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using dashing.net.Infrastructure;
+using dashing.net.common;
 using dashing.net.jobs;
 using dashing.net.streaming;
 
@@ -27,12 +31,8 @@ namespace dashing.net.Controllers
         private static readonly ConcurrentQueue<StreamWriter> _streammessage = new ConcurrentQueue<StreamWriter>();
         private static readonly ConcurrentQueue<string> _messageQueue = new ConcurrentQueue<string>();
 
-        private static Sample _sample = null;
-        private static Buzzwords _buzzwords = null;
-        private static Karma _karma = null;
-        private static Synergy _synergy = null;
-        private static Convergence _convergence = null;
-        private static Twitter _twitter = null;
+        [ImportMany(typeof(IJob))]
+        private static IList<IJob> _jobs = new List<IJob>();
 
         /// <summary>
         /// Inspiration http://techbrij.com/real-time-chart-html5-push-sse-asp-net-web-api
@@ -118,35 +118,19 @@ namespace dashing.net.Controllers
         private void LoadJobs()
         {
             Dashing.SendMessage = SendMessage;
+            
+            var catalog = new AggregateCatalog();
+            catalog.Catalogs.Add(new DirectoryCatalog(HttpContext.Current.Server.MapPath("~/Jobs/")));
+            catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
 
-            if (_sample == null)
-            {
-                _sample = new Sample();
-            }
+            var container = new CompositionContainer(catalog);
+            container.ComposeParts(this);
 
-            if (_karma == null)
-            {
-                _karma = new Karma();
-            }
+            var exports = container.GetExportedValues<IJob>();
 
-            if (_synergy == null)
+            foreach (var job in exports)
             {
-                _synergy = new Synergy();
-            }
-
-            if (_convergence == null)
-            {
-                _convergence = new Convergence();
-            }
-
-            if (_buzzwords == null)
-            {
-                _buzzwords = new Buzzwords();
-            }
-
-            if (_twitter == null)
-            {
-                _twitter = new Twitter();
+                _jobs.Add(job);
             }
         }
     }

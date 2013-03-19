@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -8,10 +9,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
+using dashing.net.common;
 using dashing.net.streaming;
 
 namespace dashing.net.jobs
 {
+    [Export(typeof(IJob))]
     public class Twitter : IJob
     {
         private const string SearchTerm = "#todayilearned";
