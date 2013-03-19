@@ -31,7 +31,6 @@ namespace dashing.net.Controllers
         private static readonly ConcurrentQueue<StreamWriter> _streammessage = new ConcurrentQueue<StreamWriter>();
         private static readonly ConcurrentQueue<string> _messageQueue = new ConcurrentQueue<string>();
 
-        [ImportMany(typeof(IJob))]
         private static IList<IJob> _jobs = new List<IJob>();
 
         /// <summary>
