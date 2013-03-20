@@ -28,31 +28,12 @@ namespace dashing.net.Controllers
 {
     public class EventsController : ApiController
     {
-        private static readonly ConcurrentQueue<StreamWriter> _streammessage = new ConcurrentQueue<StreamWriter>();
+        private static readonly ConcurrentBag<StreamWriter> _streammessage = new ConcurrentBag<StreamWriter>();
         private static readonly ConcurrentQueue<string> _messageQueue = new ConcurrentQueue<string>();
 
         private static readonly IList<IJob> _jobs = new List<IJob>();
 
-        private static bool _hasConnection = false;
-
-        public EventsController()
-        {
-            Dashing.SendMessage = SendMessage;
-
-            var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new DirectoryCatalog(HttpContext.Current.Server.MapPath("~/Jobs/")));
-            catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
-
-            var container = new CompositionContainer(catalog);
-            container.ComposeParts(this);
-
-            var exports = container.GetExportedValues<IJob>();
-
-            foreach (var job in exports)
-            {
-                _jobs.Add(job);
-            }
-        }
+        private static bool _hasInstantiated = false;
 
         /// <summary>
         /// Inspiration http://techbrij.com/real-time-chart-html5-push-sse-asp-net-web-api
@@ -62,7 +43,12 @@ namespace dashing.net.Controllers
             HttpResponseMessage response = request.CreateResponse();
             response.Content = new PushStreamContent(WriteToStream, "text/event-stream");
 
-            _hasConnection = true;
+            if (!_hasInstantiated)
+            {
+                LoadJobs();
+
+                _hasInstantiated = true;
+            }
 
             return response;
         }
@@ -70,16 +56,11 @@ namespace dashing.net.Controllers
         private void WriteToStream(Stream outputStream, HttpContent headers, TransportContext context)
         {
             var streamWriter = new StreamWriter(outputStream);
-            _streammessage.Enqueue(streamWriter);
+            _streammessage.Add(streamWriter);
         }
 
         private void SendMessage(dynamic message)
         {
-            if (!_hasConnection)
-            {
-                return;
-            }
-
             var updatedAt = TimeHelper.ElapsedTimeSinceEpoch();
 
             if (message.GetType() == typeof(JObject))
@@ -103,40 +84,63 @@ namespace dashing.net.Controllers
 
         private static void ProcessQueue(string message)
         {
+            
             _messageQueue.Enqueue(message);
 
             for (int x = 0; x < _messageQueue.Count; x++)
             {
-                var data = string.Empty;
+                string data;
                 _messageQueue.TryPeek(out data);
 
-                StreamWriter streamWriter;
-                _streammessage.TryDequeue(out streamWriter);
-
-                if (streamWriter != null && !string.IsNullOrEmpty(data))
+                for (int i = 0; i < _streammessage.Count; i++)
                 {
-                    try
-                    {
-                        streamWriter.WriteLine(data);
-                    }
-                    catch (HttpException) //connection was most likely closed
-                    {
-                        return;
-                    }
+                    StreamWriter streamWriter;
 
-                    try
+                    if (!string.IsNullOrEmpty(data) && _streammessage.TryTake(out streamWriter))
                     {
-                        streamWriter.Flush();
+                        try
+                        {
+                            streamWriter.WriteLine(data);
+                        }
+                        catch (HttpException) //connection was most likely closed
+                        {
+                            break;
+                        }
 
-                        _messageQueue.TryDequeue(out data);
-                        
-                        _streammessage.Enqueue(streamWriter);
-                    }
-                    catch (Exception)
-                    {
-                        // dont re-add the stream as an error ocurred presumable the client has lost connection
+                        try
+                        {
+                            streamWriter.Flush();
+
+                            _messageQueue.TryDequeue(out data);
+                        }
+                        catch (Exception)
+                        {
+                            // dont re-add the stream as an error ocurred presumable the client has lost connection
+                            break;
+                        }
+
+                        _streammessage.Add(streamWriter);
                     }
                 }
+            }
+        }
+
+        private void LoadJobs()
+        {
+            Dashing.SendMessage = SendMessage;
+
+            var catalog = new AggregateCatalog();
+            catalog.Catalogs.Add(new DirectoryCatalog(HttpContext.Current.Server.MapPath("~/Jobs/")));
+            catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
+
+            var container = new CompositionContainer(catalog);
+            container.ComposeParts(this);
+
+            var exports = container.GetExportedValues<IJob>();
+
+            foreach (var job in exports)
+            {
+                _jobs.Add(job);
             }
         }
     }
