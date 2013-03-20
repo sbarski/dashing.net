@@ -31,7 +31,28 @@ namespace dashing.net.Controllers
         private static readonly ConcurrentQueue<StreamWriter> _streammessage = new ConcurrentQueue<StreamWriter>();
         private static readonly ConcurrentQueue<string> _messageQueue = new ConcurrentQueue<string>();
 
-        private static IList<IJob> _jobs = new List<IJob>();
+        private static readonly IList<IJob> _jobs = new List<IJob>();
+
+        private static bool _hasConnection = false;
+
+        public EventsController()
+        {
+            Dashing.SendMessage = SendMessage;
+
+            var catalog = new AggregateCatalog();
+            catalog.Catalogs.Add(new DirectoryCatalog(HttpContext.Current.Server.MapPath("~/Jobs/")));
+            catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
+
+            var container = new CompositionContainer(catalog);
+            container.ComposeParts(this);
+
+            var exports = container.GetExportedValues<IJob>();
+
+            foreach (var job in exports)
+            {
+                _jobs.Add(job);
+            }
+        }
 
         /// <summary>
         /// Inspiration http://techbrij.com/real-time-chart-html5-push-sse-asp-net-web-api
@@ -41,7 +62,7 @@ namespace dashing.net.Controllers
             HttpResponseMessage response = request.CreateResponse();
             response.Content = new PushStreamContent(WriteToStream, "text/event-stream");
 
-            LoadJobs();
+            _hasConnection = true;
 
             return response;
         }
@@ -54,6 +75,11 @@ namespace dashing.net.Controllers
 
         private void SendMessage(dynamic message)
         {
+            if (!_hasConnection)
+            {
+                return;
+            }
+
             var updatedAt = TimeHelper.ElapsedTimeSinceEpoch();
 
             if (message.GetType() == typeof(JObject))
@@ -111,25 +137,6 @@ namespace dashing.net.Controllers
                         // dont re-add the stream as an error ocurred presumable the client has lost connection
                     }
                 }
-            }
-        }
-
-        private void LoadJobs()
-        {
-            Dashing.SendMessage = SendMessage;
-            
-            var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new DirectoryCatalog(HttpContext.Current.Server.MapPath("~/Jobs/")));
-            catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
-
-            var container = new CompositionContainer(catalog);
-            container.ComposeParts(this);
-
-            var exports = container.GetExportedValues<IJob>();
-
-            foreach (var job in exports)
-            {
-                _jobs.Add(job);
             }
         }
     }
