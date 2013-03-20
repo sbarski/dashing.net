@@ -24,6 +24,7 @@ namespace dashing.net
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            JobConfig.RegisterJobs();
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)

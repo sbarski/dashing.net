@@ -8,6 +8,6 @@ namespace dashing.net.streaming
 {
     public static class Dashing
     {
-        public static Action<dynamic> SendMessage;
+        public static Action<dynamic> SendMessage = o => { };
     }
 }
