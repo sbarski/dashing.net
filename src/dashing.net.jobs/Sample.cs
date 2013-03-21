@@ -30,8 +30,6 @@ namespace dashing.net.jobs
             CurrentValuation = _rand.Next(100);
 
             Timer = new Lazy<Timer>(() => new Timer(SendMessage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2)));
-
-            var start = Timer.Value;
         }
 
         protected void SendMessage(object message)

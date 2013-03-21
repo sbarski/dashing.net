@@ -29,8 +29,6 @@ namespace dashing.net.jobs
             CurrentKarma = _rand.Next(200000);
 
             Timer = new Lazy<Timer>(() => new Timer(SendMessage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2)));
-
-            var start = Timer.Value;
         }
 
         public void SendMessage(object sent)

@@ -70,14 +70,11 @@ namespace dashing.net.Controllers
                 message = JsonHelper.Merge(message, new { updatedAt });
             }
 
-            ProcessMessage(JsonConvert.SerializeObject(message));
-        }
+            var serialized = JsonConvert.SerializeObject(message);
 
-        private static void ProcessMessage(string data)
-        {
-            var message = string.Format("data: {0}\n\n", data);
+            var payload = string.Format("data: {0}\n\n", serialized);
 
-            _messageQueue.TryAdd(message);
+            _messageQueue.TryAdd(payload);
         }
 
         private static void ProcessQueue()
@@ -111,6 +108,8 @@ namespace dashing.net.Controllers
             Dashing.SendMessage = SendMessage;
 
             Task.Factory.StartNew(ProcessQueue);
+
+            Jobs.Start();
         }
     }
 }

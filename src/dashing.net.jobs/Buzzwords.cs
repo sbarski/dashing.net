@@ -29,8 +29,6 @@ namespace dashing.net.jobs
             _rand = new Random();
 
             Timer = new Lazy<Timer>(() => new Timer(SendMessage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2)));
-
-            var start = Timer.Value;
         }
 
         protected void SendMessage(object message)

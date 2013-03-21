@@ -19,5 +19,13 @@ namespace dashing.net.common
         {
             return _jobs;
         }
+
+        public static void Start()
+        {
+            foreach (var job in _jobs)
+            {
+                var start = job.Timer.Value;
+            }
+        }
     }
 }
