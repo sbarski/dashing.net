@@ -1,0 +1,110 @@
+﻿<style media="screen">
+    /* Transforms based on article at: http://desandro.github.com/3dtransforms/examples/card-01.html */
+
+        #card {
+            -webkit-transition: -webkit-transform 2s;
+            -moz-transition: -moz-transform 1s;
+            -o-transition: -o-transform 1s;
+            transition: transform 1s;
+            -webkit-transform-style: preserve-3d;
+            -moz-transform-style: preserve-3d;
+            -o-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+
+        #card.flipped {
+            -webkit-transform: rotateY( 180deg );
+            -moz-transform: rotateY( 180deg );
+            -o-transform: rotateY( 180deg );
+            transform: rotateY( 180deg );
+        }
+
+        #card figure {
+            display: block;
+            position: absolute;
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -o-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        
+        #card .back {
+            -webkit-transform: rotateY( 180deg );
+            -moz-transform: rotateY( 180deg );
+            -o-transform: rotateY( 180deg );
+            transform: rotateY( 180deg );
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        figure > div.widget {
+            width: 370px;
+        }
+</style>
+
+
+<div id="card" class="">
+    
+    <figure id="card1" class="front">
+        <div data-view="Image" data-image="/logo.png"></div>
+        <div data-id="synergy" data-view="Meter" data-title="Synergy" data-min="0" data-max="100"></div>
+        <div data-id="karma" data-view="Number" data-title="Karma" style="background-color: #96bf48;"></div>
+        <div data-view="Clock"></div>
+        <div data-id="buzzwords" data-view="List" data-unordered="true" data-title="Buzzwords" data-moreinfo="# of times said around the office"></div>
+
+    </figure>
+    <figure id="card2" class="hidden">
+        <div data-id="buzzwords" data-view="List" data-unordered="true" data-title="Buzzwords" data-moreinfo="# of times said around the office"></div>
+        <div data-view="Image" data-image="/logo.png"></div>
+        <div data-id="synergy" data-view="Meter" data-title="Synergy" data-min="0" data-max="100"></div>
+        <div data-id="karma" data-view="Number" data-title="Karma" style="background-color: #96bf48;"></div>
+        <div data-id="karma" data-view="Number" data-title="Karma" style="background-color: #96bf48;"></div>
+
+    </figure>
+    <figure id="card3" class="hidden">
+        <div data-view="Clock"></div>
+        <div data-view="Image" data-image="/logo.png"></div>
+        <div data-id="synergy" data-view="Meter" data-title="Synergy" data-min="0" data-max="100"></div>
+        <div data-id="synergy" data-view="Meter" data-title="Synergy" data-min="0" data-max="100"></div>
+
+        <div data-id="buzzwords" data-view="List" data-unordered="true" data-title="Buzzwords" data-moreinfo="# of times said around the office"></div>
+    </figure>
+
+</div>
+
+
+<script>
+
+    //TODO move to scripts dir
+    (function () {
+
+        "use strict";
+
+        var currentIndex = 1,
+            nextCardIndex = currentIndex + 1,
+            maxIndex = 3,
+            previousIndex = maxIndex,
+            currentClass = "front",
+            flipInterval = 5000;
+
+        function flipPanel() {
+
+            nextCardIndex = (currentIndex + 1) > maxIndex ? 1 : currentIndex + 1;
+            previousIndex = currentIndex === 1 ? maxIndex : currentIndex - 1;
+            currentClass = currentClass == "front" ? "back" : "front";
+
+            $("#card" + nextCardIndex).removeClass("hidden").addClass(currentClass);
+            $("#card" + previousIndex).removeClass("front back").addClass("hidden");
+
+            $('#card').toggleClass('flipped');
+
+            currentIndex = currentIndex === maxIndex ? 1 : currentIndex + 1;
+        }
+
+        setInterval(flipPanel, flipInterval);
+
+    })();
+
+</script>
