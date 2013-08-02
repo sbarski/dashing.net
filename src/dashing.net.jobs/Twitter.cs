@@ -28,10 +28,21 @@ namespace dashing.net.jobs
 
         private void SendMessage(object message)
         {
+            var authentication = TwitterHelper.Authenticate();
+
+            if (authentication == null)
+            {
+                Dashing.SendMessage(new { id = "twitter_mentions", comments = new object [] { new { name = "dashing.net", body = "please configure your consumer key/secret", avatar = "" } } });
+
+                return;
+            }
+
             using (var client = new WebClient())
             {
-                var url = string.Format("http://search.twitter.com/search.json?q={0}", HttpUtility.UrlEncode(SearchTerm));
-               
+                var url = string.Format("https://api.twitter.com/1.1/search/tweets.json?q={0}", HttpUtility.UrlEncode(SearchTerm));
+
+                client.Headers.Add("Authorization", string.Format("{0} {1}", authentication.token_type, authentication.access_token));
+
                 using (var data = client.OpenRead(url))
                 {
                     if (data == null)
@@ -43,16 +54,82 @@ namespace dashing.net.jobs
 
                     var results = JsonConvert.DeserializeObject<SearchResults>(reader.ReadToEnd());
 
-                    Dashing.SendMessage(new { id = "twitter_mentions", comments = results.Results.Select(n => new { name = n.FromUser, body = n.Text, avatar = n.ProfileImageUrl }) });
+                    Dashing.SendMessage(new { id = "twitter_mentions", comments = results.Results.Select(n => new { name = n.User.Name, body = n.Text, avatar = n.User.ProfileImageUrl }) });
                 }
             }
         }
-
     }
 
+    /// <summary>
+    /// Adopted from the work done by http://stackoverflow.com/a/17071447
+    /// </summary>
+    public static class TwitterHelper
+    {
+        public static TwitAuthenticateResponse Authenticate()
+        {
+            // You need to set your own keys and screen name
+            var oAuthConsumerKey = "YOUR_CONSUMER_KEY";
+            var oAuthConsumerSecret = "BWTFkDxO8yE5iYFKeP8FL6ENJoKeoQD0V2ceHaOoc";
+            var oAuthUrl = "https://api.twitter.com/oauth2/token";
+            var screenname = "dashing.net";
+
+            // Do the Authenticate
+            var authHeaderFormat = "Basic {0}";
+
+            var authHeader = string.Format(authHeaderFormat,
+                 Convert.ToBase64String(Encoding.UTF8.GetBytes(Uri.EscapeDataString(oAuthConsumerKey) + ":" +
+                        Uri.EscapeDataString((oAuthConsumerSecret)))
+                        ));
+
+            var postBody = "grant_type=client_credentials";
+
+            var authRequest = (HttpWebRequest)WebRequest.Create(oAuthUrl);
+            authRequest.Headers.Add("Authorization", authHeader);
+            authRequest.Method = "POST";
+            authRequest.ContentType = "application/x-www-form-urlencoded;charset=UTF-8";
+            authRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (var stream = authRequest.GetRequestStream())
+            {
+                byte[] content = ASCIIEncoding.ASCII.GetBytes(postBody);
+                stream.Write(content, 0, content.Length);
+            }
+
+            authRequest.Headers.Add("Accept-Encoding", "gzip");
+
+            try
+            {
+                WebResponse authResponse = authRequest.GetResponse();
+
+                // deserialize into an object
+                TwitAuthenticateResponse twitAuthResponse;
+                using (authResponse)
+                {
+                    using (var reader = new StreamReader(authResponse.GetResponseStream()))
+                    {
+                        var objectText = reader.ReadToEnd();
+                        twitAuthResponse = JsonConvert.DeserializeObject<TwitAuthenticateResponse>(objectText);
+                    }
+                }
+
+                return twitAuthResponse;
+            }
+            catch (WebException)
+            {
+                return null;
+            }
+        }
+
+        public class TwitAuthenticateResponse 
+        {
+            public string token_type { get; set; }
+            public string access_token { get; set; }
+        }
+    }
+    
     public class SearchResults
     {
-        [JsonProperty("results")]
+        [JsonProperty("statuses")]
         public List<SearchResult> Results { get; set; } 
     }
 
@@ -61,8 +138,14 @@ namespace dashing.net.jobs
         [JsonProperty("text")]
         public string Text { get; set; }
 
-        [JsonProperty("from_user")]
-        public string FromUser { get; set; }
+        [JsonProperty("user")]
+        public User User { get; set; }
+    }
+
+    public class User
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
 
         [JsonProperty("profile_image_url")]
         public string ProfileImageUrl { get; set; }
