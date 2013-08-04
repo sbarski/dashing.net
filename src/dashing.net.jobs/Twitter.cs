@@ -41,7 +41,7 @@ namespace dashing.net.jobs
             {
                 var url = string.Format("https://api.twitter.com/1.1/search/tweets.json?q={0}", HttpUtility.UrlEncode(SearchTerm));
 
-                client.Headers.Add("Authorization", string.Format("{0} {1}", authentication.token_type, authentication.access_token));
+                client.Headers.Add("Authorization", string.Format("{0} {1}", authentication.TokenType, authentication.AccessToken));
 
                 using (var data = client.OpenRead(url))
                 {
@@ -68,20 +68,19 @@ namespace dashing.net.jobs
         public static TwitAuthenticateResponse Authenticate()
         {
             // You need to set your own keys and screen name
-            var oAuthConsumerKey = "YOUR_CONSUMER_KEY";
-            var oAuthConsumerSecret = "YOUR_CONSUMER_SECRET";
-            var oAuthUrl = "https://api.twitter.com/oauth2/token";
-            var screenname = "dashing.net";
+            const string oAuthConsumerKey = "YOUR_CONSUMER_KEY";
+            const string oAuthConsumerSecret = "YOUR_CONSUMER_SECRET";
+            const string oAuthUrl = "https://api.twitter.com/oauth2/token";
 
             // Do the Authenticate
-            var authHeaderFormat = "Basic {0}";
+            const string authHeaderFormat = "Basic {0}";
 
             var authHeader = string.Format(authHeaderFormat,
                  Convert.ToBase64String(Encoding.UTF8.GetBytes(Uri.EscapeDataString(oAuthConsumerKey) + ":" +
                         Uri.EscapeDataString((oAuthConsumerSecret)))
                         ));
 
-            var postBody = "grant_type=client_credentials";
+            const string postBody = "grant_type=client_credentials";
 
             var authRequest = (HttpWebRequest)WebRequest.Create(oAuthUrl);
             authRequest.Headers.Add("Authorization", authHeader);
@@ -99,7 +98,7 @@ namespace dashing.net.jobs
 
             try
             {
-                WebResponse authResponse = authRequest.GetResponse();
+                var authResponse = authRequest.GetResponse();
 
                 // deserialize into an object
                 TwitAuthenticateResponse twitAuthResponse;
@@ -122,8 +121,8 @@ namespace dashing.net.jobs
 
         public class TwitAuthenticateResponse 
         {
-            public string token_type { get; set; }
-            public string access_token { get; set; }
+            public string TokenType { get; set; }
+            public string AccessToken { get; set; }
         }
     }
     
