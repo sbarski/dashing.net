@@ -69,7 +69,7 @@ namespace dashing.net.jobs
         {
             // You need to set your own keys and screen name
             var oAuthConsumerKey = "YOUR_CONSUMER_KEY";
-            var oAuthConsumerSecret = "BWTFkDxO8yE5iYFKeP8FL6ENJoKeoQD0V2ceHaOoc";
+            var oAuthConsumerSecret = "YOUR_CONSUMER_SECRET";
             var oAuthUrl = "https://api.twitter.com/oauth2/token";
             var screenname = "dashing.net";
 
